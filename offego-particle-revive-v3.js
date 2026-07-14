@@ -11,7 +11,7 @@
     const mobile = window.matchMedia("(max-width: 760px)").matches;
     if (mobile) {
       const style = document.createElement("style");
-      style.textContent = "@media (max-width:760px){.logo-node{min-height:auto!important;padding:72px 20px 62px!important;gap:18px!important}.logo-node h2{font-size:clamp(44px,12vw,60px)!important;line-height:.88!important}.logo-node-copy p:not(.section-index){margin-top:26px!important;font-size:16px!important;line-height:1.68!important}.particle-cat{height:min(118vw,480px)!important;margin-top:4px!important}.hero-real-product,.explorer-stage figure:not(.is-isolated) img,.mosaic-card:not(.is-isolated) img,.collection-list figure:not(.is-isolated) img,.detail-media figure:not(.is-isolated) img,.design-room .design-room-object img{object-fit:contain!important;object-position:center!important}.explorer-stage figure:not(.is-isolated),.mosaic-card:not(.is-isolated) figure,.collection-list figure:not(.is-isolated),.detail-media figure:not(.is-isolated){background:#f6e9d6!important}}";
+      style.textContent = "@media (max-width:760px){.logo-node{min-height:auto!important;padding:72px 20px 62px!important;gap:18px!important}.logo-node h2{font-size:clamp(44px,12vw,60px)!important;line-height:.88!important}.logo-node-copy p:not(.section-index){margin-top:26px!important;font-size:16px!important;line-height:1.68!important}.particle-cat{height:min(118vw,480px)!important;margin-top:4px!important}.hero-real-product,.explorer-stage figure:not(.is-isolated) img,.mosaic-card:not(.is-isolated) img,.collection-list figure:not(.is-isolated) img,.detail-media figure:not(.is-isolated) img,.design-room .design-room-object img{object-fit:contain!important;object-position:center!important}.hero-product-scene{height:auto!important;min-height:520px!important;background:#c9483b}.explorer-stage figure:not(.is-isolated),.mosaic-card:not(.is-isolated) figure,.collection-list figure:not(.is-isolated),.detail-media figure:not(.is-isolated){background:#f6e9d6!important}}";
       document.head.appendChild(style);
     }
 
@@ -67,8 +67,8 @@
           repelY = (dy / (distance || 1)) * force;
         }
 
-        dot.x += ((targetX - left + repelX) / scale - dot.x) * 0.055;
-        dot.y += ((targetY - top + repelY) / scale - dot.y) * 0.055;
+        dot.x += ((targetX - left + repelX) / scale - dot.x) * (mobile ? 0.14 : 0.11);
+        dot.y += ((targetY - top + repelY) / scale - dot.y) * (mobile ? 0.14 : 0.11);
         const x = left + dot.x * scale;
         const y = top + dot.y * scale;
         const radius = (mobile ? 1.8 : 1.35) + Math.sin(tick * 1.4 + dot.phase) * (mobile ? 0.32 : 0.38);
@@ -100,8 +100,10 @@
           if ((pixels[offset] + pixels[offset + 1] + pixels[offset + 2]) / 3 < 90) targets.push([x / 220, y / 220]);
         }
       }
-      const count = mobile ? 300 : 480;
+      const count = mobile ? 240 : 360;
       for (let index = 0; index < count; index += 1) {
+        // Spread samples across the entire logo. Taking the first N pixels
+        // only captures the ears and eyes because the scan is row-major.
         const targetIndex = Math.min(targets.length - 1, Math.floor(index * targets.length / count));
         const [tx, ty] = targets[targetIndex] || [0.5, 0.5];
         dots.push({ x: Math.random(), y: Math.random(), tx, ty, phase: index * 0.71 });
@@ -136,5 +138,11 @@
     observer.observe(canvas);
   };
 
-  window.addEventListener("load", () => window.setTimeout(start, 350), { once: true });
+  // Start as soon as the HTML is ready; waiting for every large campaign
+  // image made the particle logo appear unnecessarily late on phones.
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", start, { once: true });
+  } else {
+    start();
+  }
 })();
