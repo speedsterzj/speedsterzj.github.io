@@ -9,11 +9,10 @@
     previous.replaceWith(canvas);
 
     const mobile = window.matchMedia("(max-width: 760px)").matches;
-    if (mobile) {
-      const style = document.createElement("style");
-      style.textContent = "@media (max-width:760px){.logo-node{min-height:auto!important;padding:72px 20px 62px!important;gap:18px!important}.logo-node h2{font-size:clamp(44px,12vw,60px)!important;line-height:.88!important}.logo-node-copy p:not(.section-index){margin-top:26px!important;font-size:16px!important;line-height:1.68!important}.particle-cat{height:min(118vw,480px)!important;margin-top:4px!important}.hero-real-product,.explorer-stage figure:not(.is-isolated) img,.mosaic-card:not(.is-isolated) img,.collection-list figure:not(.is-isolated) img,.detail-media figure:not(.is-isolated) img,.design-room .design-room-object img{object-fit:contain!important;object-position:center!important}.hero-product-scene{height:auto!important;min-height:520px!important;background:#c9483b}.explorer-stage figure:not(.is-isolated),.mosaic-card:not(.is-isolated) figure,.collection-list figure:not(.is-isolated),.detail-media figure:not(.is-isolated){background:#f6e9d6!important}}";
-      document.head.appendChild(style);
-    }
+    const style = document.createElement("style");
+    style.textContent = ".hero-real-product,.explorer-stage figure img,.mosaic-card img,.collection-list figure img,.detail-media figure img,.design-room .design-room-object img{object-fit:contain!important;object-position:center!important}.hero-product-scene,.explorer-stage figure,.mosaic-card figure,.collection-list figure,.detail-media figure,.design-room figure{background:#f6e9d6!important}";
+    if (mobile) style.textContent += "@media (max-width:760px){.logo-node{min-height:auto!important;padding:72px 20px 62px!important;gap:18px!important}.logo-node h2{font-size:clamp(44px,12vw,60px)!important;line-height:.88!important}.logo-node-copy p:not(.section-index){margin-top:26px!important;font-size:16px!important;line-height:1.68!important}.particle-cat{height:min(118vw,480px)!important;margin-top:4px!important}.hero-product-scene{height:520px!important;min-height:0!important}.explorer-stage{min-height:650px!important}.mosaic-card figure,.explorer-stage figure,.collection-list figure,.detail-media figure,.design-room figure{clip-path:none!important;min-height:0!important}}";
+    document.head.appendChild(style);
 
     const context = canvas.getContext("2d");
     if (!context) return;
@@ -94,13 +93,13 @@
       sampleContext.drawImage(logo, 0, 0, 220, 220);
       const pixels = sampleContext.getImageData(0, 0, 220, 220).data;
       const targets = [];
-      for (let y = 10; y < 210; y += 4) {
-        for (let x = 10; x < 210; x += 4) {
+      for (let y = 8; y < 212; y += 3) {
+        for (let x = 8; x < 212; x += 3) {
           const offset = (y * 220 + x) * 4;
           if ((pixels[offset] + pixels[offset + 1] + pixels[offset + 2]) / 3 < 90) targets.push([x / 220, y / 220]);
         }
       }
-      const count = mobile ? 240 : 360;
+      const count = mobile ? 480 : 720;
       for (let index = 0; index < count; index += 1) {
         // Spread samples across the entire logo. Taking the first N pixels
         // only captures the ears and eyes because the scan is row-major.
