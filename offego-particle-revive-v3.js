@@ -11,7 +11,7 @@
     const mobile = window.matchMedia("(max-width: 760px)").matches;
     if (mobile) {
       const style = document.createElement("style");
-      style.textContent = "@media (max-width:760px){.logo-node{min-height:auto!important;padding:72px 20px 62px!important;gap:18px!important}.logo-node h2{font-size:clamp(44px,12vw,60px)!important;line-height:.88!important}.logo-node-copy p:not(.section-index){margin-top:26px!important;font-size:16px!important;line-height:1.68!important}.particle-cat{height:min(106vw,420px)!important;margin-top:4px!important}}";
+      style.textContent = "@media (max-width:760px){.logo-node{min-height:auto!important;padding:72px 20px 62px!important;gap:18px!important}.logo-node h2{font-size:clamp(44px,12vw,60px)!important;line-height:.88!important}.logo-node-copy p:not(.section-index){margin-top:26px!important;font-size:16px!important;line-height:1.68!important}.particle-cat{height:min(118vw,480px)!important;margin-top:4px!important}.hero-real-product,.explorer-stage figure:not(.is-isolated) img,.mosaic-card:not(.is-isolated) img,.collection-list figure:not(.is-isolated) img,.detail-media figure:not(.is-isolated) img,.design-room .design-room-object img{object-fit:contain!important;object-position:center!important}.explorer-stage figure:not(.is-isolated),.mosaic-card:not(.is-isolated) figure,.collection-list figure:not(.is-isolated),.detail-media figure:not(.is-isolated){background:#f6e9d6!important}}";
       document.head.appendChild(style);
     }
 
@@ -102,7 +102,8 @@
       }
       const count = mobile ? 300 : 480;
       for (let index = 0; index < count; index += 1) {
-        const [tx, ty] = targets[index % targets.length] || [0.5, 0.5];
+        const targetIndex = Math.min(targets.length - 1, Math.floor(index * targets.length / count));
+        const [tx, ty] = targets[targetIndex] || [0.5, 0.5];
         dots.push({ x: Math.random(), y: Math.random(), tx, ty, phase: index * 0.71 });
       }
       ready = true;
